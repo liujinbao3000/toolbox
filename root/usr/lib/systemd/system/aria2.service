@@ -1,0 +1,17 @@
+[Unit]
+Description=aria2
+Require=network.target
+After=syslog.target network.target remote-fs.target nss-lookup.target
+
+[Service]
+User=root
+Group=root
+
+GuessMainPID=yes
+ExecStart=/bin/aria2c --enable-rpc --rpc-listen-all -D --conf-path=/program/aria2/aria2.conf
+ExecReload=/bin/kill -s QUIT 
+ExecStop=/bin/kill -s QUIT 
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

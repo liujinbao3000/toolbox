@@ -1,0 +1,111 @@
+#!/bin/sh
+#Shell菜单演示
+#变量"configpath"的路径根据实际情况修改
+basepath=$(cd `dirname $0`; pwd)
+function menu ()
+{
+ cat << EOF
+----------------------------------------
+|***************菜单主页***************|
+|*************在容器内执行*************|
+----------------------------------------
+`echo -e "\033[47;30m 可以在任意选择界面按"Ctrl+c"键退出;脚本文件路径：$basepath\033[0m"`
+`echo -e "\033[47;30m 1)重启httpd\033[0m"`
+`echo -e "\033[47;30m 2)重启aria2\033[0m"`
+`echo -e "\033[47;30m 3)重启FRP\033[0m"`
+`echo -e "\033[47;30m 4)\033[0m"`
+`echo -e "\033[47;30m 5)重启vsftpd\033[0m"`
+`echo -e "\033[47;30m 6)重启samba\033[0m"`
+`echo -e "\033[47;30m 7)重启cron\033[0m"`
+`echo -e "\033[47;30m 8)重启nfs-server\033[0m"`
+`echo -e "\033[47;30m 9)\033[0m"`
+`echo -e "\033[47;30m 0)退出\033[0m"`
+EOF
+read -p "请输入功能对应的数字：" num1
+while [ $num1 != '0' ];do
+case $num1 in
+ 1)
+   clear
+   systemctl start httpd
+   systemctl status httpd
+   menu
+   ;;
+ 2)
+   clear
+   systemctl restart aria2
+   systemctl status aria2
+   menu
+   ;;
+ 3)
+   clear
+   read -p "请输入frps还是frpc：" frp
+   vi /program/frp/$frp.ini
+   systemctl restart $frp
+   systemctl status $frp
+   menu
+   ;;
+ 4)
+   clear
+
+   menu
+   ;;
+ 5)
+   clear
+   systemctl restart vsftpd
+   systemctl status vsftpd
+   menu
+   ;;
+ 6)
+   clear
+   read -s -n1 -p "默认用户:share默认密码:share;按任意键继续......"
+   systemctl restart smb nmb
+   systemctl status smb
+   menu
+   ;;
+ 7)
+   clear
+   systemctl restart crond
+   systemctl status crond
+   menu
+   ;;
+  8)
+   clear
+   systemctl restart nfs-server
+   systemctl status nfs-server
+   menu
+   ;;
+  9)
+   clear
+   echo -e "\033[47;30m********服务程序********\033[0m"
+   echo -e "\033[47;30m 1)cron\033[0m"
+   echo -e "\033[47;30m 1)aria2\033[0m"
+   echo -e "\033[47;30m 2)\033[0m"
+   echo -e "\033[47;30m 3)rsyslog\033[0m"
+   echo -e "\033[47;30m 4)rsync033[0m"
+   echo -e "\033[47;30m 5)vsftpd033[0m"
+   echo -e "\033[47;30m 6)httpd\033[0m"
+   echo -e "\033[47;30m 7)samba\033[0m"
+   echo -e "\033[47;30m 8)nfs\033[0m"
+   echo -e "\033[47;30m********网络工具********\033[0m"
+   echo -e "\033[47;30m 1)iperf3\033[0m"
+   echo -e "\033[47;30m 2)qperf\033[0m"
+   echo -e "\033[47;30m 3)nmap\033[0m"
+   echo -e "\033[47;30m 4)fping\033[0m"
+   echo -e "\033[47;30m 5)iftop\033[0m"
+   echo -e "\033[47;30m 6)screen\033[0m"
+   echo -e "\033[47;30m 7)aria2c\033[0m"
+   echo -e "\033[47;30m 8)mtr\033[0m"
+   echo -e "\033[47;30m 9)dig\033[0m"
+   echo -e "\033[47;30m********系统工具*******\033[0m"
+   echo -e "\033[47;30m 1)iotop\033[0m"
+   echo -e "\033[47;30m 2)qperf\033[0m"
+   echo -e "\033[47;30m 3)nmap\033[0m"
+   echo -e "\033[47;30m 4)fping\033[0m"
+   exit 0
+   ;;
+ 0)
+  exit 0
+esac
+done
+}
+menu
