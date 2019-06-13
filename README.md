@@ -2,7 +2,7 @@
 ### 守护进程
 1. 部署容器
    ```
-   docker create -it \
+   docker run -itd \
      --privileged=true \
      --name=toolbox \
      --net=host \
